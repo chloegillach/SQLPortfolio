@@ -1,0 +1,57 @@
+/*Create a table for store products being sold. Showing price of item sold, color of item, and the cost to make the item*/
+CREATE TABLE chloes_store (id INTEGER PRIMARY KEY AUTOINCREMENT, item TEXT, price REAL, color TEXT, cost REAL, qty_sold INTEGER);
+
+
+/*Insert items into chloes_store table */
+INSERT INTO chloes_store (item, price,color,cost,qty_sold)
+values
+("shirt", 10.99, "brown", 4.99,4), 
+("pants",25.49,"black",12.25,8), 
+("hat", 5.25 ,"yellow",3.99,9), 
+("glasses",7.99,"blue",6.00,12), 
+("watch", 24.75,"black",15.25,3), 
+("socks",9.50,"white",7.50,4),
+("apron", 15.25, "pink",5.99,6), 
+("water bottle", 36.99, "purple",12.50,7),
+("leggings",12.99,"black",10.99,13), 
+("earrings", 35.49, "clear", 25.99,14),
+("skirt", 17.99,"orange", 11.49,3), 
+("tank top",9.49,"pink", 3.25,19),
+("candy",1.25,"multi",.35,25),
+("hair ties", 3.99, "black", 1.25,14),
+("shoes", 55.99, "blue", 36.99,7);
+
+/*Make sure table was successfully created */
+SELECT * FROM chloes_store;
+
+/*Looking at which item has the highest profit margin per item */
+SELECT item, round(price-cost,3) as profitPerItem 
+FROM chloes_store
+GROUP BY item
+ORDER BY profitPerItem desc;
+
+/* Get revenue, profit and profit margin for each item and filter by items that have a profit margin higher than 50%*/
+SELECT item,qty_sold,round((price*qty_sold),2) as Revenue, round((qty_sold*cost),2) as totalCOGS, round(((price*qty_sold)-(qty_sold*cost)),2) as Profit, round(((price*qty_sold)-(qty_sold*cost))/(price*qty_sold)*100,2) as profit_margin
+FROM chloes_store
+GROUP BY item
+HAVING profit_margin >50
+ORDER BY profit_margin desc;
+
+
+
+/* What color we have the most items in */
+SELECT color,count(color) 
+FROM chloes_store
+GROUP BY color;
+
+/* How expensive are our items */
+SELECT count(*) as num_items_in_cat,
+    CASE
+        WHEN price < 10.00 THEN "cheap"
+        WHEN price > 10.00 and price < 25.00 THEN "mid priced"
+        WHEN price > 25.00 and price < 40.00 THEN "semiexpensive"
+        ELSE "expensive"
+        END as price_category
+FROM chloes_store
+GROUP BY price_category
+ORDER BY num_items_in_cat asc;
