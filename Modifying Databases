@@ -1,0 +1,28 @@
+/* This project shows basic database modifications such as CREATE, UPDATE, INSERT INTO, and DELETE. DROP could also be used here but will be left in comments. */
+
+/* Create a table */
+CREATE TABLE foodTracker (id INTEGER PRIMARY KEY AUTOINCREMENT, food TEXT, taste TEXT, calories INTEGER, servingSize INTEGER);
+
+/* insert rows into table */
+INSERT INTO foodTracker (food,taste,calories, servingSize) VALUES
+("bananas", "sweet", 20, 1),
+("chips", "salty", 100, 25),
+("salsa","spicy" , 120, 30),
+("fruit snacks", "sugary", 200,10);
+
+SELECT * FROM foodTracker;
+
+/* Update rows in table */
+UPDATE foodTracker
+SET food = "banana" 
+WHERE id = 1;
+
+SELECT * FROM foodTracker;
+
+/* Delete row from table */
+DELETE FROM foodtracker WHERE id = 2 AND food = "chips" ; 
+
+SELECT * FROM foodTracker;
+
+/* Rare that Drop would be used but if it were... 
+DROP TABLE foodTracker; */ 
