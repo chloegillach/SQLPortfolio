@@ -1,0 +1,75 @@
+/*For this project I downloaed this data from kaggle, created a table, and then inserted the data into my database */
+
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+song_key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+song_mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness decimal(8,7) NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL )
+
+/* Review that data table pulled in correctly and see data */ 
+SELECT * FROM BIT_DB.Spotifydata
+
+/* Start analysis */
+
+/* How many artist are listed in this data */
+SELECT count(distinct(artist_name))
+FROM BIT_DB.SpotifyData
+
+/* How many songs does each artist have in the data, and who has the most */
+SELECT  artist_name, count(track_name) as numberSongs
+FROM BIT_DB.SpotifyData
+GROUP BY artist_name
+ORDER BY numberSongs DESC
+
+/* Looking at the average dance ability, popularity, and energy by artist and track */
+SELECT artist_name, track_name, avg(danceability), avg(popularity), avg(energy)
+FROM BIT_DB.SpotifyData
+GROUP BY artist_name, track_name
+
+/* Top 10 artists based on popularity */ 
+SELECT artist_name, track_name, popularity
+FROM BIT_DB.SpotifyData
+ORDER BY popularity DESC
+LIMIT 10
+
+/* Longest and shortest tracks and their artist and track name */
+SELECT artist_name, track_name, max(duration_ms)
+FROM BIT_DB.SpotifyData
+
+/* Average danceability for the 10 most popoular songs */
+SELECT track_name,artist_name, popularity, avg(danceability)
+FROM BIT_DB.SpotifyData
+GROUP BY track_name
+ORDER BY popularity DESC
+LIMIT 10
+
+/* Group tracks into tempo speeds */
+SELECT track_name, tempo,
+CASE 
+    WHEN tempo < 100 THEN 'Slow tempo'
+    WHEN tempo > 100 AND tempo < 150 THEN 'Medium Tempo'
+    ELSE 'Fast Tempo'
+    END as TempoSpeed
+FROM BIT_DB.SpotifyData
+GROUP BY track_name
+ORDER BY tempo ASC
+
+/* Lists the artists by their avg speechiness, from highest to lowest*/
+SELECT artist_name, avg(speechiness)
+FROM BIT_DB.SpotifyData
+GROUP BY artist_name
+ORDER BY avg(speechiness) DESC
